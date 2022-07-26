@@ -1,30 +1,26 @@
 import React, { Component } from 'react';
-import ArticleChild from './ArticleChild';
 import MainTitle from '../../shared/MainTitle';
+import ArticleItem from '../ArticleItem';
+
 import './latest-news-list.css';
 
 
-function ArticleLatest(props) {
+function ArticleLatest({ articleProps, mainTitle, ...restPrams}) {
     return (
         <div className="latest-news section">
             <div className="tcl-container">
-                <MainTitle mainTitle={props.mainTitle} typeArticle={props.typeArticle}/>
+                <MainTitle {...mainTitle} />
                 <div className='latest-news__list spacing'>
-                    <ArticleChild
-                        text={props.text}
-                        bground={props.bground}
-                        author={props.author}
-                    />
-                    <ArticleChild
-                        text={props.text}
-                        bground={props.bground}
-                        author={props.author}
-                    />
-                    <ArticleChild
-                       text={props.text}
-                       bground={props.bground}
-                       author={props.author}
-                    />
+                    <div className="latest-news__card">
+                        <ArticleItem {...articleProps} {...restPrams} />
+                    </div>
+                    <div className="latest-news__card">
+                        <ArticleItem {...articleProps} {...restPrams}/>
+                    </div>
+
+                    <div className="latest-news__card">
+                        <ArticleItem {...articleProps} {...restPrams}/>
+                    </div>
                 </div>
             </div>
         </div>
