@@ -39,9 +39,9 @@ function renderList() {
     if (item.amount > 0) {
       listIcome +=
         `<div class="item clearfix">
-        <div class="item__description">${formatCurency(item.description)}</div>
+        <div class="item__description">${item.description}</div>
         <div class="right clearfix">
-          <div class="item__value">+ ${item.amount}</div>
+          <div class="item__value">+ ${formatCurency(item.amount)}</div>
           <div class="item__delete">
             <button class="item__delete--btn">
               <i class="ion-ios-close-outline"></i>
