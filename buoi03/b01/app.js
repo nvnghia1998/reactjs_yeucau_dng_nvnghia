@@ -5,42 +5,40 @@ const eleSelectType = document.querySelector('.add__type');
 const inputDes = document.querySelector('.add__description');
 const inputMoney = document.querySelector('.add__value');
 const btnAdd = document.querySelector('.add__btn');
+const budgetValue = document.querySelector('.budget__value');
+const incomeMoney = document.querySelector('.budget__income--value');
+const expendMoney = document.querySelector('.budget__expenses--value');
+const expendPercent = document.querySelector('.budget__expenses--percentage');
 
 // Data
-let listData = [
-  {
-    id: createUUID(),
-    description: 'Chi tieu ngay 26/07',
-    amount: -100000
-  },
-  {
-    id: createUUID(),
-    description: 'Thu nhap thang 06',
-    amount: 3000000
-  },
-  {
-    id: createUUID(),
-    description: 'Thu nhap thang 07',
-    amount: 2000000
-  },
-  {
-    id: createUUID(),
-    description: 'Chi tieu ngay 27/07',
-    amount: -150000
-  },
-];
 
-let listIncomes = listData.filter(dataItem => dataItem.amount > 0);
-let listExpenses = listData.filter(dataItem => dataItem.amount < 0);
-let totalAmountIncome = calTotalAmount(listIncomes);
-let totalAmountExpense = calTotalAmount(listExpenses);
-let totalAmount = calTotalAmount(listData);
+let listIncomes = {};
+let listExpenses = {};
+let totalAmountIncome = 0;
+let totalAmountExpense = 0;
+let totalAmount = 0;
+let listData = JSON.parse(localStorage.getItem('moneys')) || []
 
-renderBudgetList();
+function render() {
+  listIncomes = listData.filter(dataItem => dataItem.amount > 0);
+  listExpenses = listData.filter(dataItem => dataItem.amount < 0);
+  totalAmountIncome = calTotalAmount(listIncomes);
+  totalAmountExpense = calTotalAmount(listExpenses);
+  totalAmount = calTotalAmount(listData);
+  budgetValue.innerHTML = formatStringAmount(totalAmount);
+  incomeMoney.innerHTML = formatStringAmount(totalAmountIncome);
+  expendMoney.innerHTML = formatStringAmount(totalAmountExpense);
+  expendPercent.innerHTML = formatPercentAmount(totalAmountExpense, totalAmount);
+  renderBudgetList();
+}
+
+render();
+
+
+
 
 // render component
 function renderBudgetList() {
-  console.log(listIncomes);
   eleListIncomes.innerHTML = listIncomes.map(item => renderBudgetItem(item, totalAmount)).join('');
   eleListExpenses.innerHTML = listExpenses.map(item => renderBudgetItem(item, totalAmount)).join('');
 }
@@ -100,67 +98,59 @@ function calTotalAmount(listData) {
   return total;
 }
 
+// Reset input
 function resetForm() {
   eleSelectType.value = 'inc';
   inputDes.value = ''
   inputMoney.value = ''
 }
 
+// Style input
 eleSelectType.addEventListener('change', function (e) {
   let borderInput = 'red-focus';
   let borderBtnAdd = 'red';
-  // console.log(inputDes.classList);
-  // if (e.target.value === 'inc') {
-  //   borderInput = 'red-focus';
-  //   borderBtnAdd = 'red';
-  // }
-
+  eleSelectType.classList.toggle(borderInput);
   inputDes.classList.toggle(borderInput);
   inputMoney.classList.toggle(borderInput);
   btnAdd.classList.toggle(borderBtnAdd);
 })
+
+// Thêm thu chi
 btnAdd.addEventListener('click', function () {
   let type = eleSelectType.value;
   let description = inputDes.value.trim();
   let amount = inputMoney.value;
 
   if (!description) {
-    alert('Description khong duoc trong');
+    alert('Mô tả không được trống');
     return;
   }
 
-  if (amount < 0) {
-    alert('Sotie phai lon hon 0')
+  if (!amount || amount < 0) {
+    alert('Số tiền phải lớn hơn 0')
     return;
   }
-
-  amount = type === 'inc' ? amount : amount * -1
+  amount = Number(amount.replace(/\,/g, ''), 10)
+  amount = type === 'inc' ? amount : amount*-1
   const objMoney = {
     id: createUUID(),
     description: description,
     amount: amount
   }
   listData.unshift(objMoney);
-  console.log(listData);
+  localStorage.setItem('moneys', JSON.stringify(listData))
   resetForm();
-  listIncomes = listData.filter(dataItem => dataItem.amount > 0);
-  listExpenses = listData.filter(dataItem => dataItem.amount < 0);
-  renderBudgetList();
+  render();
 })
 
+// Xóa thu chi
 document.addEventListener('click', function (event) {
   let ele = event.target;
-
-
   if (ele.classList.contains('ion-ios-close-outline')) {
     let id = ele.dataset.id;
     listData = listData.filter(dataItem => dataItem.id !== id);
-    listIncomes = listData.filter(dataItem => dataItem.amount > 0);
-    listExpenses = listData.filter(dataItem => dataItem.amount < 0);
-    totalAmountIncome = calTotalAmount(listIncomes);
-    totalAmountExpense = calTotalAmount(listExpenses);
-    totalAmount = calTotalAmount(listData);
-    renderBudgetList();
+    localStorage.setItem('moneys', JSON.stringify(listData))
+    render();
   }
 })
 
@@ -178,3 +168,13 @@ function formatPercentAmount(amount, total) {
   return percent + '%';
 }
 
+inputMoney.addEventListener('input', function (e) {
+  let number = e.target.value;
+  number = Number(number.replace(/\,/g, ''), 10);
+  if (number > 0)
+  inputMoney.value = (number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+  else {
+    number = number != 0 ? '' : 0;
+    inputMoney.value = number;
+  }
+})
