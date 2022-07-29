@@ -18,8 +18,10 @@ let totalAmountIncome = 0;
 let totalAmountExpense = 0;
 let totalAmount = 0;
 let listData = JSON.parse(localStorage.getItem('moneys')) || []
+render(listData);
 
-function render() {
+function render(data) {
+  localStorage.setItem('moneys', JSON.stringify(data));
   listIncomes = listData.filter(dataItem => dataItem.amount > 0);
   listExpenses = listData.filter(dataItem => dataItem.amount < 0);
   totalAmountIncome = calTotalAmount(listIncomes);
@@ -31,11 +33,6 @@ function render() {
   expendPercent.innerHTML = formatPercentAmount(totalAmountExpense, totalAmount);
   renderBudgetList();
 }
-
-render();
-
-
-
 
 // render component
 function renderBudgetList() {
@@ -100,7 +97,6 @@ function calTotalAmount(listData) {
 
 // Reset input
 function resetForm() {
-  eleSelectType.value = 'inc';
   inputDes.value = ''
   inputMoney.value = ''
 }
@@ -119,7 +115,7 @@ eleSelectType.addEventListener('change', function (e) {
 btnAdd.addEventListener('click', function () {
   let type = eleSelectType.value;
   let description = inputDes.value.trim();
-  let amount = inputMoney.value;
+  let amount = Number(inputMoney.value.replace(/\,/g, ''), 10);
 
   if (!description) {
     alert('Mô tả không được trống');
@@ -130,17 +126,17 @@ btnAdd.addEventListener('click', function () {
     alert('Số tiền phải lớn hơn 0')
     return;
   }
-  amount = Number(amount.replace(/\,/g, ''), 10)
-  amount = type === 'inc' ? amount : amount*-1
+
+  amount = type === 'inc' ? amount : amount * -1
   const objMoney = {
     id: createUUID(),
     description: description,
     amount: amount
   }
   listData.unshift(objMoney);
-  localStorage.setItem('moneys', JSON.stringify(listData))
+  // localStorage.setItem('moneys', JSON.stringify(listData))
   resetForm();
-  render();
+  render(listData);
 })
 
 // Xóa thu chi
@@ -149,8 +145,8 @@ document.addEventListener('click', function (event) {
   if (ele.classList.contains('ion-ios-close-outline')) {
     let id = ele.dataset.id;
     listData = listData.filter(dataItem => dataItem.id !== id);
-    localStorage.setItem('moneys', JSON.stringify(listData))
-    render();
+    // localStorage.setItem('moneys', JSON.stringify(listData))
+    render(listData);
   }
 })
 
@@ -168,11 +164,12 @@ function formatPercentAmount(amount, total) {
   return percent + '%';
 }
 
+// Format khi nhập số tiền
 inputMoney.addEventListener('input', function (e) {
   let number = e.target.value;
   number = Number(number.replace(/\,/g, ''), 10);
   if (number > 0)
-  inputMoney.value = (number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+    inputMoney.value = number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   else {
     number = number != 0 ? '' : 0;
     inputMoney.value = number;
