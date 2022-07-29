@@ -30,14 +30,14 @@ function render(data) {
   budgetValue.innerHTML = formatStringAmount(totalAmount);
   incomeMoney.innerHTML = formatStringAmount(totalAmountIncome);
   expendMoney.innerHTML = formatStringAmount(totalAmountExpense);
-  expendPercent.innerHTML = formatPercentAmount(totalAmountExpense, totalAmount);
+  expendPercent.innerHTML = formatPercentAmount(totalAmountExpense, totalAmountIncome);
   renderBudgetList();
 }
 
 // render component
 function renderBudgetList() {
-  eleListIncomes.innerHTML = listIncomes.map(item => renderBudgetItem(item, totalAmount)).join('');
-  eleListExpenses.innerHTML = listExpenses.map(item => renderBudgetItem(item, totalAmount)).join('');
+  eleListIncomes.innerHTML = listIncomes.map(item => renderBudgetItem(item, totalAmountIncome)).join('');
+  eleListExpenses.innerHTML = listExpenses.map(item => renderBudgetItem(item, totalAmountIncome)).join('');
 }
 
 function renderBudgetItem(data, total) {
