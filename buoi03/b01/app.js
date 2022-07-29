@@ -36,7 +36,7 @@ function render(data) {
 
 // render component
 function renderBudgetList() {
-  eleListIncomes.innerHTML = listIncomes.map(item => renderBudgetItem(item, totalAmountIncome)).join('');
+  eleListIncomes.innerHTML = listIncomes.map(item => renderBudgetItem(item, totalAmount)).join('');
   eleListExpenses.innerHTML = listExpenses.map(item => renderBudgetItem(item, totalAmountIncome)).join('');
 }
 
