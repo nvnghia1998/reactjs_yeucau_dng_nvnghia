@@ -1,28 +1,6 @@
-import { v4 as uuidv4 } from 'uuid';
 import {ADD_BUDGET, DELETE_BUDGET} from './actions';
 const initState = {
-  listDataIncome: [
-    {
-      id: uuidv4(),
-      description: 'Chi tieu ngay 26/07',
-      amount: -100000
-    },
-    {
-      id: uuidv4(),
-      description: 'Thu nhap thang 06',
-      amount: 3000000
-    },
-    {
-      id: uuidv4(),
-      description: 'Thu nhap thang 07',
-      amount: 2000000
-    },
-    {
-      id: uuidv4(),
-      description: 'Chi tieu ngay 27/07',
-      amount: -150000
-    }
-  ]
+  listDataIncome:JSON.parse(localStorage.getItem('budgets')) || []
 };
 
 function reducer(state = initState, action) {
@@ -36,14 +14,15 @@ function reducer(state = initState, action) {
         description:action.payload.description,
         amount:action.payload.amount,
       })
+      localStorage.setItem('budgets', JSON.stringify(list));
       return {
         ...state,
         listDataIncome:list
       }
     case DELETE_BUDGET:
       let id = action.payload;
-      console.log(action.payload);
-      let newList = [...state.listDataIncome].filter(item => item.id !== id)
+      let newList = [...state.listDataIncome].filter(item => item.id !== id);
+      localStorage.setItem('budgets', JSON.stringify(newList));
       return {
         ...state,
         listDataIncome: newList

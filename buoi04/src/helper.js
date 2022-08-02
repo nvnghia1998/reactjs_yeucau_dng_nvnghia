@@ -13,6 +13,7 @@ export function formatStringAmount(amount) {
 }
 
 export function formatPercentAmount(amount, total) {
+ 
   if (!total) {
     return '0%';
   }
@@ -22,7 +23,6 @@ export function formatPercentAmount(amount, total) {
   if (percent < 0) {
     percent = percent * (-1);
   }
-
   return percent + '%';
 }
 
