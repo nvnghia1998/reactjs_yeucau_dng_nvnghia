@@ -31,6 +31,7 @@ export default function ArticleItem({
   const authorId = post.authorId;
   const view = post.view;
   const categories = post.categories;
+  const description = post.description
   //const 
   const slugLink = '/post/' + slug;
   const authorLink = '/user/' + authorId;
@@ -46,7 +47,7 @@ export default function ArticleItem({
 
         <ArticleItemTitle title={title} slugLink={slugLink} />
 
-        {isShowDesc && <ArticleItemDesc />}
+        {isShowDesc && <ArticleItemDesc desc={description}/>}
 
         <ArticleItemInfo
           author={author}
