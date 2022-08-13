@@ -61,15 +61,14 @@ export function actFetchArticlePopularAsync() {
   }
 }
 
-export function actFetchArticleGeneralAsync(perPage) {
+export function actFetchArticleGeneralAsync(currentPage) {
   return async (dispatch) => {
     try {
-      const response = await postService.getArticleGeneral(perPage);
-      //console.log(perPage);
-      const posts = response.data.map(mappingPostData);
-      dispatch(actFetchArticleGeneral(posts));
+      const response = await postService.getArticleGeneral(currentPage);
+        const posts = response.data.map(mappingPostData);
+        dispatch(actFetchArticleGeneral(posts));
     } catch (err) {
-      // TODO
+      dispatch(actFetchArticleGeneral(null));
     }
   }
 }

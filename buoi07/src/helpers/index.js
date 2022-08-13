@@ -1,5 +1,4 @@
 
-import dayjs from 'dayjs'
 export function getQueryStr(name) {
   return new URLSearchParams(window.location.search).get(name)
 }
@@ -17,14 +16,15 @@ export function mappingPostData(post) {
     categories: post.categories,
     description: post.excerpt.rendered
   }
-
-
 }
-
-export function getListCategoryLocalStore() {
-  return JSON.parse(localStorage.getItem('categories')) || [];
-}
-
-export function calculatorTime(createdDate) {
-
+export function handleDateCategory(categories) {
+  let cateData = {};
+  categories.forEach(item => {
+    cateData[item.id] = {
+      id: item.id,
+      name: item.name,
+      link: item.link
+    }
+  });
+  return cateData;
 }

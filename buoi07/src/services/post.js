@@ -25,10 +25,10 @@ const postService = {
     });
   },
 
-  getArticleGeneral(perPage) {
+  getArticleGeneral(currentPage) {
     return postService.getList({ 
-      per_page: perPage, 
-      page: 1 
+      per_page: 2, 
+      page: currentPage 
     });
   }
 }

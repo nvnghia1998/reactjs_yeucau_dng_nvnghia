@@ -1,24 +1,18 @@
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { getListCategoryLocalStore } from '../../helpers';
 
 export default function ArticleItemCategories({ categories }) {
-  const cateAll = getListCategoryLocalStore();
-  const arrayCate = [];
-
-  if (cateAll && categories) {
-    categories.forEach(item => {
-      arrayCate.push(cateAll.find(cate => cate.id == item))
-    });
-  }
-
+  const allCate = useSelector(state => state.Category.listCategory);
+  if(!allCate) return null;
+  if(!categories) return null;
   return (
     <ul className="article-item__categories">
       {
-        arrayCate.map(cate => {
+        categories.map(item => {
+          if(!item) return null;
           return (
             // <Link to={cate.link} key={cate.id}>{cate.name}</Link>
-            <li key={cate.id}><a href={cate.link} className="btn btn-category">{cate.name}</a></li>
+            <li key={allCate[item].id}><a href={allCate[item].link} className="btn btn-category">{allCate[item].name}</a></li>
           )
         })
       }

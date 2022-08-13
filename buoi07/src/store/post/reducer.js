@@ -19,9 +19,10 @@ function reducer(postState = intState, action) {
         articlePopular: action.payload.posts
       }
     case ACT_FETCH_ARTICLE_GENERAL:
+      let newList = action.payload.posts ? postState.articleGeneral.concat(action.payload.posts) : postState.articleGeneral;
       return {
         ...postState,
-        articleGeneral: action.payload.posts
+        articleGeneral: newList
       }
     default:
       return postState;
