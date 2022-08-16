@@ -26,11 +26,12 @@ export function actFetchArticlePopular(posts) {
   }
 }
 
-export function actFetchArticleGeneral(posts) {
+export function actFetchArticleGeneral(posts,total) {
   return {
     type: ACT_FETCH_ARTICLE_GENERAL,
     payload: {
-      posts
+      posts,
+      total
     }
   }
 }
@@ -65,8 +66,10 @@ export function actFetchArticleGeneralAsync(currentPage) {
   return async (dispatch) => {
     try {
       const response = await postService.getArticleGeneral(currentPage);
-        const posts = response.data.map(mappingPostData);
-        dispatch(actFetchArticleGeneral(posts));
+      const total = response.headers["x-wp-total"];
+      const posts = response.data.map(mappingPostData);
+      
+        dispatch(actFetchArticleGeneral(posts,total));
     } catch (err) {
       dispatch(actFetchArticleGeneral(null));
     }

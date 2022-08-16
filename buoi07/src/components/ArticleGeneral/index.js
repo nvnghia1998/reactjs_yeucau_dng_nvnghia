@@ -8,20 +8,20 @@ import { actFetchArticleGeneralAsync } from '../../store/post/actions';
 function ArticleGeneral() {
   const dispatch = useDispatch();
   const posts = useSelector(state => state.Post.articleGeneral);
+  const total = useSelector(state => state.Post.total);
   const [currentPage, setPerPage] = useState(1);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    dispatch(actFetchArticleGeneralAsync(currentPage));
+    dispatch(actFetchArticleGeneralAsync(currentPage)).then(() => {
+      setLoading(false);
+    })
+    
   }, [dispatch, currentPage]);
 
-  useEffect(() => {
-    setLoading(false);
-  }, [posts]);
-
   const handleLoadMore = () => {
-    setLoading(true)
-    setPerPage(prevState => prevState + 1)
+      setLoading(true)
+      setPerPage(prevState => prevState + 1)
   }
 
   return (
@@ -45,7 +45,9 @@ function ArticleGeneral() {
         </div>
         {/* End Row News List */}
         <div className="text-center">
-          <Button type="primary" size="large" onClick={handleLoadMore} loading={loading}>Tải thêm</Button>
+          {
+            (total > posts.length) && <Button type="primary" size="large" onClick={handleLoadMore} loading={loading}>Tải thêm</Button>
+          }
         </div>
       </div>
     </div>

@@ -18,7 +18,6 @@ import {
 function App() {
   const dispatch = useDispatch();
   const cates = useSelector(state => state.Category.listCategory);
-  console.log(cates);
   useEffect(() => {
     dispatch(actGetListCategoryAsync());
   }, [dispatch]);

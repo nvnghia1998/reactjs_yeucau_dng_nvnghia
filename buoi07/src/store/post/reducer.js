@@ -3,7 +3,8 @@ import { ACT_FETCH_ARTICLE_LATEST, ACT_FETCH_ARTICLE_POPULAR, ACT_FETCH_ARTICLE_
 const intState = {
   articleLatest: [],
   articlePopular: [],
-  articleGeneral: []
+  articleGeneral: [],
+  total:0
 }
 
 function reducer(postState = intState, action) {
@@ -20,9 +21,12 @@ function reducer(postState = intState, action) {
       }
     case ACT_FETCH_ARTICLE_GENERAL:
       let newList = action.payload.posts ? postState.articleGeneral.concat(action.payload.posts) : postState.articleGeneral;
+      console.log(action.payload.total);
       return {
         ...postState,
-        articleGeneral: newList
+        articleGeneral:newList,
+        total:action.payload.total
+          
       }
     default:
       return postState;
