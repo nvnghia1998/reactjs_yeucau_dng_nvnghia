@@ -66,3 +66,11 @@
       display: -webkit-flex;
       display: -ms-flexbox;
       display: flex; } }
+
+.border-warning {
+  border: solid 1px red!important;
+}
+
+.color-red{
+  color: red;
+}

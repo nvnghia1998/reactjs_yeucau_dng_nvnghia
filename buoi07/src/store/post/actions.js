@@ -1,6 +1,7 @@
 import { mappingPostData } from "../../helpers";
 import postService from "../../services/post";
 
+
 // Action Type
 export const ACT_FETCH_ARTICLE_LATEST = 'ACT_FETCH_ARTICLE_LATEST';
 export const ACT_FETCH_ARTICLE_POPULAR = 'ACT_FETCH_ARTICLE_POPULAR';
@@ -75,5 +76,7 @@ export function actFetchArticleGeneralAsync(currentPage) {
     }
   }
 }
+
+
 
 
